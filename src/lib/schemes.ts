@@ -252,7 +252,7 @@ export type Parsed = {
 
 const KEYWORDS: Record<string, string[]> = {
   women: ["woman", "women", "mahila", "female", "lady", "ladies", "aurat", "behen"],
-  "sc-st": ["sc", "st", "dalit", "scheduled caste", "scheduled tribe", "adivasi"],
+  "sc-st": ["sc/st", "dalit", "scheduled caste", "scheduled tribe", "adivasi"],
   vendor: ["street", "vendor", "thela", "rehri", "hawker", "footpath", "khomcha", "stall"],
   food: ["masala", "achaar", "pickle", "bakery", "food", "dairy", "papad", "namkeen", "sweets", "mithai", "khana", "atta", "flour"],
   tailoring: ["tailor", "tailoring", "silai", "darzi", "stitch", "boutique", "kapda"],
