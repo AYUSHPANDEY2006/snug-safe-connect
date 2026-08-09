@@ -14,7 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      scheme_queries: {
+        Row: {
+          created_at: string
+          detected_amount: number | null
+          detected_tags: string[]
+          id: string
+          matched_scheme_ids: string[]
+          query_text: string
+        }
+        Insert: {
+          created_at?: string
+          detected_amount?: number | null
+          detected_tags?: string[]
+          id?: string
+          matched_scheme_ids?: string[]
+          query_text: string
+        }
+        Update: {
+          created_at?: string
+          detected_amount?: number | null
+          detected_tags?: string[]
+          id?: string
+          matched_scheme_ids?: string[]
+          query_text?: string
+        }
+        Relationships: []
+      }
+      schemes: {
+        Row: {
+          amount: string
+          apply_at: string
+          collateral: string
+          created_at: string
+          documents: string[]
+          id: string
+          kind: string
+          max_amount: number
+          min_amount: number
+          name: string
+          name_hi: string
+          sort_order: number
+          summary: string
+          tags: string[]
+        }
+        Insert: {
+          amount: string
+          apply_at?: string
+          collateral?: string
+          created_at?: string
+          documents?: string[]
+          id: string
+          kind: string
+          max_amount?: number
+          min_amount?: number
+          name: string
+          name_hi: string
+          sort_order?: number
+          summary: string
+          tags?: string[]
+        }
+        Update: {
+          amount?: string
+          apply_at?: string
+          collateral?: string
+          created_at?: string
+          documents?: string[]
+          id?: string
+          kind?: string
+          max_amount?: number
+          min_amount?: number
+          name?: string
+          name_hi?: string
+          sort_order?: number
+          summary?: string
+          tags?: string[]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
