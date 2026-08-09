@@ -299,14 +299,15 @@ export function matchSchemes(input: string, limit = 4): Scheme[] {
     let score = 0;
     for (const tag of tags) if (scheme.tags.includes(tag)) score += 3;
     if (amount != null) {
-      if (amount >= scheme.min && amount <= scheme.max) score += 5;
+      if (amount >= scheme.min && amount <= scheme.max) score += 8;
       else if (amount < scheme.min) score -= 2;
       else score -= 1;
     }
     if (tags.includes("women") && scheme.tags.includes("women")) score += 2;
     if (tags.includes("vendor") && scheme.id === "svanidhi") score += 4;
     if (tags.includes("food") && scheme.id === "pmfme") score += 3;
-    if (tags.includes("new") && scheme.id === "pmegp") score += 3;
+    if (tags.includes("new") && !tags.includes("machine") && scheme.id === "pmegp") score += 3;
+    if (tags.includes("machine") && scheme.tags.includes("machine")) score += 2;
     return { scheme, score };
   })
     .filter((s) => s.score > 0)
@@ -346,7 +347,8 @@ export function buildReply(input: string, schemes: Scheme[]): string {
 
   if (tags.includes("women")) bits.push("Mahila entrepreneurs ke liye alag benefits milte hain.");
   if (tags.includes("machine")) bits.push("Machine kharidne par subsidy bhi mil sakti hai.");
-  if (tags.includes("new")) bits.push("Naya kaam shuru karne par subsidy wali scheme better rehti hai.");
+  if (tags.includes("new") && !tags.includes("machine"))
+    bits.push("Naya kaam shuru karne par subsidy wali scheme better rehti hai.");
 
   bits.push(
     `Maine ${schemes.length} scheme nikali hain — sabse upar ${schemes[0]?.name ?? "Mudra"} hai. Kya aapki business Udyam registered hai?`,
