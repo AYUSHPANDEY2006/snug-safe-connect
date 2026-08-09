@@ -293,13 +293,27 @@ export function parseAmount(text: string): number | null {
   return null;
 }
 
+const GATED: Record<string, string[]> = {
+  standup: ["women", "sc-st"],
+  "mahila-udyam": ["women"],
+  "weaver-mudra": ["artisan", "tailoring"],
+  svanidhi: ["vendor"],
+  pmfme: ["food"],
+};
+
 export function matchSchemes(input: string, limit = 4): Scheme[] {
   const { amount, tags } = parseQuery(input);
   const scored = SCHEMES.map((scheme) => {
     let score = 0;
+    const gate = GATED[scheme.id];
+    if (gate && !gate.some((tag) => tags.includes(tag))) return { scheme, score: 0 };
     for (const tag of tags) if (scheme.tags.includes(tag)) score += 3;
     if (amount != null) {
-      if (amount >= scheme.min && amount <= scheme.max) score += 8;
+      if (amount >= scheme.min && amount <= scheme.max) {
+        score += 8;
+        // Prefer schemes sized for the amount over very broad umbrella schemes.
+        if (scheme.max <= amount * 6) score += 4;
+      }
       else if (amount < scheme.min) score -= 2;
       else score -= 1;
     }
