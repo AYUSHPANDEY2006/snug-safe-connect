@@ -302,8 +302,13 @@ const GATED: Record<string, string[]> = {
 };
 
 export function matchSchemes(input: string, limit = 4): Scheme[] {
+  return matchFrom(SCHEMES, input, limit);
+}
+
+export function matchFrom(list: Scheme[], input: string, limit = 4): Scheme[] {
+  const source = list.length > 0 ? list : SCHEMES;
   const { amount, tags } = parseQuery(input);
-  const scored = SCHEMES.map((scheme) => {
+  const scored = source.map((scheme) => {
     let score = 0;
     const gate = GATED[scheme.id];
     if (gate && !gate.some((tag) => tags.includes(tag))) return { scheme, score: 0 };
@@ -329,12 +334,11 @@ export function matchSchemes(input: string, limit = 4): Scheme[] {
 
   const picked = scored.slice(0, limit).map((s) => s.scheme);
   if (picked.length === 0) {
-    return [
-      SCHEMES.find((s) => s.id === "mudra-kishore")!,
-      SCHEMES.find((s) => s.id === "pmegp")!,
-      SCHEMES.find((s) => s.id === "cgtmse")!,
-      SCHEMES.find((s) => s.id === "svanidhi")!,
-    ];
+    const fallbackIds = ["mudra-kishore", "pmegp", "cgtmse", "svanidhi"];
+    const fallback = fallbackIds
+      .map((id) => source.find((s) => s.id === id))
+      .filter((s): s is Scheme => Boolean(s));
+    return fallback.length > 0 ? fallback : source.slice(0, limit);
   }
   return picked;
 }
