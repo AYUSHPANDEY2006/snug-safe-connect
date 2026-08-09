@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Keyboard, Mic, Send, Square, Volume2 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
 import { SchemeCard } from "@/components/setu/SchemeCard";
 import { SetuHeader } from "@/components/setu/SetuHeader";
 import { buildReply, matchSchemes, type Scheme } from "@/lib/schemes";
+import { matchSchemesForQuery } from "@/lib/schemes.functions";
 import { useSpeech } from "@/lib/useSpeech";
 
 export const Route = createFileRoute("/")({
@@ -41,6 +43,7 @@ function Index() {
   const [typing, setTyping] = useState(false);
   const [thinking, setThinking] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const matchOnServer = useServerFn(matchSchemesForQuery);
   const { supported, listening, speaking, interim, startListening, stopListening, speak, stopSpeaking } =
     useSpeech();
 
@@ -52,16 +55,25 @@ function Index() {
       setThinking(true);
       setSchemes([]);
       setReply("");
-      window.setTimeout(() => {
-        const matched = matchSchemes(value);
-        const answer = buildReply(value, matched);
+      void (async () => {
+        let matched: Scheme[];
+        let answer: string;
+        try {
+          const result = await matchOnServer({ data: { query: value } });
+          matched = result.schemes;
+          answer = result.reply;
+        } catch (error) {
+          console.error("Scheme lookup failed, using local index", error);
+          matched = matchSchemes(value);
+          answer = buildReply(value, matched);
+        }
         setSchemes(matched);
         setReply(answer);
         setThinking(false);
         speak(answer);
-      }, 700);
+      })();
     },
-    [speak],
+    [matchOnServer, speak],
   );
 
   const onMicClick = () => {
