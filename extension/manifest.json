@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Fine-Print & Contract Trap Visualizer",
+  "version": "1.0.0",
+  "description": "Scan any Terms of Service page for predatory clauses, get a 0-100 risk score, plain-English translations and a ready opt-out letter.",
+  "permissions": ["activeTab", "scripting", "clipboardWrite"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Scan this page's fine print",
+    "default_icon": { "48": "icon.png", "128": "icon.png" }
+  },
+  "icons": { "48": "icon.png", "128": "icon.png" }
+}
