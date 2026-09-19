@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Fine-Print Visualizer</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="mark">FP</div>
+      <div>
+        <h1>Fine-Print Visualizer</h1>
+        <p class="sub">Contract trap detector</p>
+      </div>
+    </header>
+
+    <main id="app">
+      <section id="idle" class="pane">
+        <p class="lede">
+          Open a Terms of Service, privacy policy or contract page, then scan it.
+          Nothing leaves your browser.
+        </p>
+        <button id="scan" class="primary">Scan Current Page</button>
+        <button id="demo" class="ghost">Run demo sample</button>
+      </section>
+
+      <section id="loading" class="pane hidden">
+        <div class="spinner"></div>
+        <p class="lede">Reading the fine print…</p>
+      </section>
+
+      <section id="results" class="pane hidden">
+        <div class="score-card">
+          <div class="dial"><span id="score">0</span><small>/100</small></div>
+          <div class="score-meta">
+            <span id="verdict" class="badge">—</span>
+            <p id="summary" class="lede"></p>
+          </div>
+        </div>
+
+        <div class="counts">
+          <span class="chip red"><b id="c-red">0</b> red</span>
+          <span class="chip yellow"><b id="c-yellow">0</b> yellow</span>
+          <span class="chip green"><b id="c-green">0</b> green</span>
+        </div>
+
+        <h2 class="h2">Clauses found</h2>
+        <div id="clauses"></div>
+
+        <h2 class="h2">Opt-out draft</h2>
+        <pre id="draft" class="draft"></pre>
+        <button id="copy" class="primary">Copy Opt-Out Draft</button>
+        <button id="again" class="ghost">Scan another page</button>
+      </section>
+
+      <section id="error" class="pane hidden">
+        <p class="lede" id="error-msg"></p>
+        <button id="fallback" class="primary">Use demo sample instead</button>
+      </section>
+    </main>
+
+    <script src="rules.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
